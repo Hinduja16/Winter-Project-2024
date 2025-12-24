@@ -1,0 +1,91 @@
+import java.io.*;
+import java.util.Scanner;
+
+class Student {
+    int roll;
+    String name;
+    int m1, m2, m3;
+    int total;
+    char grade;
+}
+
+public class StudentResultManagement {
+
+    static char calculateGrade(int total) {
+        if (total >= 270)
+            return 'A';
+        else if (total >= 240)
+            return 'B';
+        else if (total >= 180)
+            return 'C';
+        else
+            return 'F';
+    }
+
+    public static void addStudent() throws IOException {
+        Scanner sc = new Scanner(System.in);
+        Student s = new Student();
+
+        FileWriter fw = new FileWriter("students.txt", true);
+        BufferedWriter bw = new BufferedWriter(fw);
+
+        System.out.print("Enter Roll Number: ");
+        s.roll = sc.nextInt();
+
+        System.out.print("Enter Name: ");
+        s.name = sc.next();
+
+        System.out.print("Enter marks in 3 subjects: ");
+        s.m1 = sc.nextInt();
+        s.m2 = sc.nextInt();
+        s.m3 = sc.nextInt();
+
+        s.total = s.m1 + s.m2 + s.m3;
+        s.grade = calculateGrade(s.total);
+
+        bw.write(s.roll + " " + s.name + " " + s.m1 + " " + s.m2 + " " + s.m3
+                + " " + s.total + " " + s.grade);
+        bw.newLine();
+
+        bw.close();
+        System.out.println("Student result added successfully!");
+    }
+
+    public static void displayStudents() throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader("students.txt"));
+        String line;
+
+        System.out.println("\nRoll  Name  M1  M2  M3  Total  Grade");
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+        }
+        br.close();
+    }
+
+    public static void main(String[] args) throws IOException {
+        Scanner sc = new Scanner(System.in);
+        int choice;
+
+        while (true) {
+            System.out.println("\n--- Student Result Management System ---");
+            System.out.println("1. Add Student Result");
+            System.out.println("2. Display All Results");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    addStudent();
+                    break;
+                case 2:
+                    displayStudents();
+                    break;
+                case 3:
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        }
+    }
+}
